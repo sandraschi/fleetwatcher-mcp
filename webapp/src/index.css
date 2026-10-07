@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-size: 17px;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  color-scheme: dark;
+  color: #ececef;
+  background-color: #0b0b0f;
+  line-height: 1.55;
+}
+
+code, pre {
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* Readable minimums: no tiny low-contrast body text */
+small, .text-xs {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+button:focus-visible, a:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+}

@@ -1,0 +1,12 @@
+# fleetwatcher-mcp
+
+> Internal fleet pulse — monitor repos, builds, sessions, and supply chain.
+
+- `llms-full.txt` — full documentation: tools, usage, architecture
+- `src/fleetwatcher_mcp/server.py` — FastMCP server with 4 core tool groups
+- `src/fleetwatcher_mcp/pulse.py` — repo activity scanning
+- `src/fleetwatcher_mcp/builds.py` — NSIS build monitoring
+- `src/fleetwatcher_mcp/sessions.py` — session documentation search
+- `src/fleetwatcher_mcp/graph.py` — fleet topology and port mapping
+- `src/fleetwatcher_mcp/health.py` — backend liveness observer (TCP + PID + read-only SCM + HTTP probe; never actuates)
+- `patterns/fleetwatcher-mcp-spec.md` — design spec

@@ -1,0 +1,69 @@
+# fleetwatcher-mcp
+
+## Summary
+
+Internal fleet observability server. Monitors repo activity, NSIS build outcomes,
+agent session documentation, and fleet topology (MCP interdependencies, port usage).
+
+**Port**: 10918 (HTTP backend), dashboard at 10919 (Vite frontend)
+**Dual transport**: stdio (CLI) + HTTP (Fleet Pulse dashboard)
+
+## Tools
+
+### fleet_pulse(operation, repo_path?, hours?)
+
+| Operation | Description |
+|-----------|-------------|
+| recent | Repos with commits/assfix in the last N hours |
+| repo | Detailed status: branch, dirty, sentinels, build log presence |
+| dirty | Repos with uncommitted changes |
+
+### build_watch(operation, repo_name?, limit?)
+
+| Operation | Description |
+|-----------|-------------|
+| recent | Last N build entries parsed from BUILD_LOG.md across all repos |
+| log | Full BUILD_LOG.md content for one repo |
+
+### session_scan(operation, query?, hours?)
+
+| Operation | Description |
+|-----------|-------------|
+| recent | Session docs modified in the last N hours |
+| search | Full-text search across session doc content |
+
+### fleet_graph(operation)
+
+| Operation | Description |
+|-----------|-------------|
+| dependencies | MCP server interdependencies (from opencode configs) |
+| port_map | Live port scan vs registered WEBAPP_PORTS.md |
+| health | Backend liveness per repo: TCP + listener PID + read-only SCM state + HTTP HealthPath probe. Observer only, never restarts. Verdicts: healthy, degraded, dead, listening-but-hung, unbound, conflict, unknown-listening. |
+
+### fleetwatcher_help() / fleetwatcher_status()
+
+Help text and health check.
+
+## Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| FLEETWATCHER_PORT | (stdio) | HTTP port for dual transport |
+| FLEETWATCHER_HOST | 127.0.0.1 | HTTP bind address |
+| FLEETWATCHER_REPOS_ROOT | D:\Dev\repos | Fleet repos root |
+| FLEETWATCHER_SESSIONS_ROOT | .../data/sessions | Session docs directory |
+| FLEETWATCHER_PORT_REGISTRY | .../WEBAPP_PORTS.md | Port registry path |
+
+## Architecture
+
+```
+fleetwatcher-mcp (FastMCP)
+  ├── fleet_pulse() → git log + assfix timestamps
+  ├── build_watch() → BUILD_LOG.md parsing
+  ├── session_scan() → filesystem walk + grep
+  └── fleet_graph() → opencode config + port scan
+
+Fleet Pulse dashboard (Vite + React)
+  ├── Internal Status tab (fleetwatcher backend)
+  └── External Intel tab (aiwatcher backend)
+```

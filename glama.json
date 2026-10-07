@@ -1,0 +1,14 @@
+{
+  "name": "fleetwatcher-mcp",
+  "description": "Internal fleet pulse — repo activity, builds, sessions, topology",
+  "version": "0.1.0",
+  "categories": ["monitoring", "infrastructure"],
+  "tools": [
+    "fleet_pulse",
+    "build_watch",
+    "session_scan",
+    "fleet_graph",
+    "fleetwatcher_help",
+    "fleetwatcher_status"
+  ]
+}
